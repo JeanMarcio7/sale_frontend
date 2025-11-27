@@ -5,7 +5,7 @@ import { Employee } from '../../core/models/models';
 @Injectable({
   providedIn: 'root'
 })
-export class EmployeeService {
+export class SupplierService {
 
   private BASE_URL = 'http://127.0.0.1:8000/api/v1/employees/';
 

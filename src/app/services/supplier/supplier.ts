@@ -1,35 +1,33 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Supplier } from '../../core/models/models';
-import { Observable } from 'rxjs';
-
-const API_URL = 'http://127.0.0.1:8000/api/v1/suppliers/';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SupplierService {
+
+  private BASE_URL = 'http://127.0.0.1:8000/api/v1/suppliers/';
+
   suppliers = signal<Supplier[]>([]);
 
   constructor(private http: HttpClient) {}
 
   loadAll() {
-    this.http.get<Supplier[]>(API_URL).subscribe(this.suppliers.set);
+    this.http.get<Supplier[]>(this.BASE_URL).subscribe(data => {
+      this.suppliers.set(data);
+    });
   }
 
-  getById(id: number): Observable<Supplier> {
-    return this.http.get<Supplier>(`${API_URL}${id}/`);
+  create(sup: any) {
+    return this.http.post<Supplier>(this.BASE_URL, sup);
   }
 
-  create(data: Supplier): Observable<Supplier> {
-    return this.http.post<Supplier>(API_URL, data);
+  update(id: number, sup: any) {
+    return this.http.put<Supplier>(`${this.BASE_URL}${id}/`, sup);
   }
 
-  update(id: number, data: Supplier): Observable<Supplier> {
-    return this.http.put<Supplier>(`${API_URL}${id}/`, data);
-  }
-
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${API_URL}${id}/`);
+  delete(id: number) {
+    return this.http.delete(`${this.BASE_URL}${id}/`);
   }
 }

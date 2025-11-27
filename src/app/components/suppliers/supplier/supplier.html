@@ -1,1 +1,51 @@
-<p>supplier works!</p>
+<mat-card>
+
+  <mat-card-title>Fornecedores</mat-card-title>
+
+  <table mat-table [dataSource]="supplierService.suppliers()">
+
+    <!-- Nome -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nome </th>
+      <td mat-cell *matCellDef="let sup"> {{ sup.name }} </td>
+    </ng-container>
+
+    <!-- Documento -->
+    <ng-container matColumnDef="legal_document">
+      <th mat-header-cell *matHeaderCellDef> Documento </th>
+      <td mat-cell *matCellDef="let sup"> {{ sup.salary }} </td>
+    </ng-container>
+
+    <!-- Ações -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Ações </th>
+      <td mat-cell *matCellDef="let sup">
+        <button mat-button (click)="selectForEdit(sup)">Editar</button>
+        <button mat-button color="warn" (click)="delete(sup)">Excluir</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['name','legal_document','actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name','legal_document','actions']"></tr>
+
+  </table>
+
+  <!-- FORM -->
+  <form [formGroup]="form" (ngSubmit)="save()">
+
+    <mat-form-field appearance="fill">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Documento</mat-label>
+      <input matInput formControlName="legal_document">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary">Salvar</button>
+    <button mat-button type="button" (click)="clearAndReload()">Cancelar</button>
+
+  </form>
+
+</mat-card>
