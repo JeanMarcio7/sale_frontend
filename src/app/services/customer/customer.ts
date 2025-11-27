@@ -1,35 +1,33 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Customer } from '../../core/models/models';
-import { Observable } from 'rxjs';
-
-const API_URL = 'http://127.0.0.1:8000/api/v1/customers/';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomerService {
+
+  private BASE_URL = 'http://127.0.0.1:8000/api/v1/customers/';
+
   customers = signal<Customer[]>([]);
 
   constructor(private http: HttpClient) {}
 
   loadAll() {
-    this.http.get<Customer[]>(API_URL).subscribe(this.customers.set);
+    this.http.get<Customer[]>(this.BASE_URL).subscribe(data => {
+      this.customers.set(data);
+    });
   }
 
-  getById(id: number): Observable<Customer> {
-    return this.http.get<Customer>(`${API_URL}${id}/`);
+  create(emp: any) {
+    return this.http.post<Customer>(this.BASE_URL, emp);
   }
 
-  create(data: Customer): Observable<Customer> {
-    return this.http.post<Customer>(API_URL, data);
+  update(id: number, emp: any) {
+    return this.http.put<Customer>(`${this.BASE_URL}${id}/`, emp);
   }
 
-  update(id: number, data: Customer): Observable<Customer> {
-    return this.http.put<Customer>(`${API_URL}${id}/`, data);
-  }
-
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${API_URL}${id}/`);
+  delete(id: number) {
+    return this.http.delete(`${this.BASE_URL}${id}/`);
   }
 }

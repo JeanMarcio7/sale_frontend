@@ -1,1 +1,69 @@
-<p>customer works!</p>
+<mat-card>
+
+  <mat-card-title>Customers</mat-card-title>
+
+  <table mat-table [dataSource]="customerService.customers()">
+
+    <!-- Nome -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nome </th>
+      <td mat-cell *matCellDef="let cust"> {{ cust.name }} </td>
+    </ng-container>
+
+    <!-- Renda -->
+    <ng-container matColumnDef="income">
+      <th mat-header-cell *matHeaderCellDef> Renda </th>
+      <td mat-cell *matCellDef="let cust"> {{ cust.income }} </td>
+    </ng-container>
+
+    <!-- Ações -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Ações </th>
+      <td mat-cell *matCellDef="let cust">
+        <button mat-button (click)="selectForEdit(cust)">Editar</button>
+        <button mat-button color="warn" (click)="delete(cust)">Excluir</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['name','income','actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name','income','actions']"></tr>
+
+  </table>
+
+  <!-- FORM -->
+  <form [formGroup]="form" (ngSubmit)="save()">
+
+    <mat-form-field appearance="fill">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Renda</mat-label>
+      <input matInput type="number" formControlName="income">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Gênero</mat-label>
+      <mat-select formControlName="gender">
+        <mat-option value="M">Masculino</mat-option>
+        <mat-option value="F">Feminino</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>ID Distrito</mat-label>
+      <input matInput type="number" formControlName="district">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>ID Estado Civil</mat-label>
+      <input matInput type="number" formControlName="marital_status">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary">Salvar</button>
+    <button mat-button type="button" (click)="clearAndReload()">Cancelar</button>
+
+  </form>
+
+</mat-card>

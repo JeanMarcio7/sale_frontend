@@ -4,13 +4,17 @@ export interface ModelBase {
   modified_at?: string;
   active?: boolean;
 }
+export enum Gender {
+  M = 'M',
+  F = 'F'
+}
 
 export interface Customer extends ModelBase {
   name: string;
   income: number;
   gender: 'M' | 'F';
-  id_district: number;
-  id_marital_status: number;
+  district: number;
+  marital_status: number;
 }
 
 export interface Supplier extends ModelBase {
@@ -26,10 +30,6 @@ export interface Product extends ModelBase {
   id_supplier: number;
 }
 
-export enum Gender {
-  M = 'M',
-  F = 'F'
-}
 
 export interface Employee extends ModelBase {
   name: string;

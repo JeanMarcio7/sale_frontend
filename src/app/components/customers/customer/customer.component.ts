@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { EmployeeService } from '../../../services/employee/employee';
-import { Employee } from '../../../core/models/models';
+import { CustomerService } from '../../../services/customer/customer';
+import { Customer } from '../../../core/models/models';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -23,10 +23,10 @@ import { MatButtonModule } from '@angular/material/button';
     MatSelectModule,
     MatButtonModule
   ],
-  templateUrl: './employee.html',
-  styleUrls: ['./employee.css']
+  templateUrl: './customer.html',
+  styleUrls: ['./customer.component.css']
 })
-export class EmployeeComponent implements OnInit {
+export class CustomerComponent implements OnInit {
 
   form!: FormGroup;
 
@@ -34,37 +34,30 @@ export class EmployeeComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    public employeeService: EmployeeService
+    public customerService: CustomerService
   ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
       name: [''],
-      salary: [''],
-      admission_date: [''],
-      birth_date: [''],
+      income: [''],
       gender: [''],
-
-      department: [''],
       district: [''],
-      marital_status: ['']
+      marital_status: [''],
     });
 
-    this.employeeService.loadAll();
+    this.customerService.loadAll();
   }
 
-  selectForEdit(emp: Employee) {
-    this.selectedId.set(emp.id ?? null);
+  selectForEdit(cust: Customer) {
+    this.selectedId.set(cust.id ?? null);
 
     this.form.patchValue({
-      name: emp.name,
-      salary: emp.salary,
-      admission_date: emp.admission_date,
-      birth_date: emp.birth_date,
-      gender: emp.gender,
-      department: emp.department,
-      district: emp.district,
-      marital_status: emp.marital_status
+      name: cust.name,
+      income: cust.income,
+      gender: cust.gender,
+      district: cust.district,
+      marital_status: cust.marital_status
     });
   }
 
@@ -72,30 +65,30 @@ export class EmployeeComponent implements OnInit {
     const payload = this.form.value;
 
     if (this.selectedId()) {
-      this.employeeService.update(this.selectedId()!, payload).subscribe({
+      this.customerService.update(this.selectedId()!, payload).subscribe({
         next: () => this.clearAndReload(),
-        error: (e) => console.error("Erro ao atualizar:", e)
+        error: (c) => console.error("Erro ao atualizar:", c)
       });
 
     } else {
-      this.employeeService.create(payload).subscribe({
+      this.customerService.create(payload).subscribe({
         next: () => this.clearAndReload(),
-        error: (e) => console.error("Erro ao criar:", e)
+        error: (c) => console.error("Erro ao criar:", c)
       });
     }
   }
 
-  delete(emp: Employee) {
-    if (!emp.id) return;
+  delete(cust: Customer) {
+    if (!cust.id) return;
 
-    this.employeeService.delete(emp.id).subscribe(() => {
-      this.employeeService.loadAll();
+    this.customerService.delete(cust.id).subscribe(() => {
+      this.customerService.loadAll();
     });
   }
 
   clearAndReload() {
     this.selectedId.set(null);
     this.form.reset();
-    this.employeeService.loadAll();
+    this.customerService.loadAll();
   }
 }

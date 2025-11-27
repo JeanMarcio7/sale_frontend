@@ -2,9 +2,7 @@
 
   <mat-card-title>Funcionários</mat-card-title>
 
-  <table mat-table [dataSource]="(employeeService.employees$ | async) ?? []">
-
-
+  <table mat-table [dataSource]="employeeService.employees()">
 
     <!-- Nome -->
     <ng-container matColumnDef="name">
@@ -32,6 +30,7 @@
 
   </table>
 
+  <!-- FORM -->
   <form [formGroup]="form" (ngSubmit)="save()">
 
     <mat-form-field appearance="fill">
@@ -57,8 +56,8 @@
     <mat-form-field appearance="fill">
       <mat-label>Gênero</mat-label>
       <mat-select formControlName="gender">
-        <mat-option [value]="'M'">Masculino</mat-option>
-        <mat-option [value]="'F'">Feminino</mat-option>
+        <mat-option value="M">Masculino</mat-option>
+        <mat-option value="F">Feminino</mat-option>
       </mat-select>
     </mat-form-field>
 
