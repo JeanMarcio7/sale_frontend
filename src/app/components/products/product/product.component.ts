@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { EmployeeService } from '../../../services/employee/employee';
-import { Employee } from '../../../core/models/models';
+import { ProductService } from '../../../services/product/product';
+import { Product } from '../../../core/models/models';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -23,10 +23,10 @@ import { MatButtonModule } from '@angular/material/button';
     MatSelectModule,
     MatButtonModule
   ],
-  templateUrl: './employee.html',
-  styleUrls: ['./employee.css']
+  templateUrl: './product.html',
+  styleUrls: ['./product.component.css']
 })
-export class EmployeeComponent implements OnInit {
+export class ProductComponent implements OnInit {
 
   form!: FormGroup;
 
@@ -34,37 +34,31 @@ export class EmployeeComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    public employeeService: EmployeeService
+    public productService: ProductService
   ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
       name: [''],
-      salary: [''],
-      admission_date: [''],
-      birth_date: [''],
-      gender: [''],
+      cost_price: [''],
+      sale_price: [''],
+      product_group: [''],
+      supplier: [''],
 
-      department: [''],
-      district: [''],
-      marital_status: ['']
     });
 
-    this.employeeService.loadAll();
+    this.productService.loadAll();
   }
 
-  selectForEdit(emp: Employee) {
-    this.selectedId.set(emp.id ?? null);
+  selectForEdit(pro: Product) {
+    this.selectedId.set(pro.id ?? null);
 
     this.form.patchValue({
-      name: emp.name,
-      salary: emp.salary,
-      admission_date: emp.admission_date,
-      birth_date: emp.birth_date,
-      gender: emp.gender,
-      department: emp.department,
-      district: emp.district,
-      marital_status: emp.marital_status
+      name: pro.name,
+      cost_price: pro.cost_price,
+      sale_price: pro.sale_price,
+      product_group: pro.product_group,
+      supplier: pro.supplier,
     });
   }
 
@@ -72,30 +66,30 @@ export class EmployeeComponent implements OnInit {
     const payload = this.form.value;
 
     if (this.selectedId()) {
-      this.employeeService.update(this.selectedId()!, payload).subscribe({
+      this.productService.update(this.selectedId()!, payload).subscribe({
         next: () => this.clearAndReload(),
         error: (e) => console.error("Erro ao atualizar:", e)
       });
 
     } else {
-      this.employeeService.create(payload).subscribe({
+      this.productService.create(payload).subscribe({
         next: () => this.clearAndReload(),
         error: (e) => console.error("Erro ao criar:", e)
       });
     }
   }
 
-  delete(emp: Employee) {
-    if (!emp.id) return;
+  delete(pro: Product) {
+    if (!pro.id) return;
 
-    this.employeeService.delete(emp.id).subscribe(() => {
-      this.employeeService.loadAll();
+    this.productService.delete(pro.id).subscribe(() => {
+      this.productService.loadAll();
     });
   }
 
   clearAndReload() {
     this.selectedId.set(null);
     this.form.reset();
-    this.employeeService.loadAll();
+    this.productService.loadAll();
   }
 }

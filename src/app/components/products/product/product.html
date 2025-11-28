@@ -1,1 +1,72 @@
-<p>product works!</p>
+<mat-card>
+
+  <mat-card-title>Produtos</mat-card-title>
+
+  <table mat-table [dataSource]="productService.products()">
+
+    <!-- Nome -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nome </th>
+      <td mat-cell *matCellDef="let pro"> {{ pro.name }} </td>
+    </ng-container>
+
+    <!-- Preço de custo -->
+    <ng-container matColumnDef="cost_price">
+      <th mat-header-cell *matHeaderCellDef> Preço Custo </th>
+      <td mat-cell *matCellDef="let pro"> {{ pro.cost_price }} </td>
+    </ng-container>
+
+    <!-- Preço de venda -->
+    <ng-container matColumnDef="sale_price">
+      <th mat-header-cell *matHeaderCellDef> Preço Venda </th>
+      <td mat-cell *matCellDef="let pro"> {{ pro.sale_price }} </td>
+    </ng-container>
+
+    <!-- Ações -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Ações </th>
+      <td mat-cell *matCellDef="let pro">
+        <button mat-button (click)="selectForEdit(pro)">Editar</button>
+        <button mat-button color="warn" (click)="delete(pro)">Excluir</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['name','cost_price', 'sale_price', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name','cost_price', 'sale_price', 'actions']"></tr>
+
+  </table>
+
+  <!-- FORM -->
+  <form [formGroup]="form" (ngSubmit)="save()">
+
+    <mat-form-field appearance="fill">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Preço de custo</mat-label>
+      <input matInput type="number" formControlName="cost_price">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Preço Venda</mat-label>
+      <input matInput type="number" formControlName="sale_price">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Product_group</mat-label>
+      <input matInput type="number" formControlName="product_group">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Fornecedor</mat-label>
+      <input matInput type="number" formControlName="supplier">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary">Salvar</button>
+    <button mat-button type="button" (click)="clearAndReload()">Cancelar</button>
+
+  </form>
+
+</mat-card>

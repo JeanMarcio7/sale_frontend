@@ -26,8 +26,8 @@ export interface Product extends ModelBase {
   name: string;
   cost_price: number;
   sale_price: number;
-  id_product_group: number;
-  id_supplier: number;
+  product_group: number;
+  supplier: number;
 }
 
 

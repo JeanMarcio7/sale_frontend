@@ -1,35 +1,33 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../../core/models/models';
-import { Observable } from 'rxjs';
-
-const API_URL = 'http://127.0.0.1:8000/api/v1/products/';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
+
+  private BASE_URL = 'http://127.0.0.1:8000/api/v1/products/';
+
   products = signal<Product[]>([]);
 
   constructor(private http: HttpClient) {}
 
   loadAll() {
-    this.http.get<Product[]>(API_URL).subscribe(this.products.set);
+    this.http.get<Product[]>(this.BASE_URL).subscribe(data => {
+      this.products.set(data);
+    });
   }
 
-  getById(id: number): Observable<Product> {
-    return this.http.get<Product>(`${API_URL}${id}/`);
+  create(pro: any) {
+    return this.http.post<Product>(this.BASE_URL, pro);
   }
 
-  create(data: Product): Observable<Product> {
-    return this.http.post<Product>(API_URL, data);
+  update(id: number, pro: any) {
+    return this.http.put<Product>(`${this.BASE_URL}${id}/`, pro);
   }
 
-  update(id: number, data: Product): Observable<Product> {
-    return this.http.put<Product>(`${API_URL}${id}/`, data);
-  }
-
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${API_URL}${id}/`);
+  delete(id: number) {
+    return this.http.delete(`${this.BASE_URL}${id}/`);
   }
 }
